@@ -51,7 +51,10 @@ class YamlDriver extends AbstractFileDriver
         $propertiesMetadata = array();
         if (array_key_exists('virtual_properties', $config)) {
             foreach ($config['virtual_properties'] as $methodName => $propertySettings) {
-                if ( ! $class->hasMethod($methodName)) {
+                if (
+                    (!isset($config['is_proxy_class']) || $config['is_proxy_class'] === false) &&
+                    !$class->hasMethod($methodName)
+                ) {
                     throw new RuntimeException('The method '.$methodName.' not found in class '.$class->name);
                 }
 
